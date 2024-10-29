@@ -39,7 +39,7 @@
             top: 50%;
             left: 50%;
             width: 450px;
-            height: 460px;
+            height: 700px;
             margin-left: -225px;
             margin-top: -150px;
         }
@@ -187,6 +187,12 @@
             </label>
         </div>
         <div>
+            <img src="/verifyCode" alt="验证码" />
+            <label>
+            <input type="text" name="verifyCode" placeholder="请输入验证码" />
+            </label>
+        </div>
+        <div>
             <label>
                 <input type="submit" value="立即注册" class="btn">
             </label>
@@ -204,4 +210,9 @@
     </form>
 </div>
 </body>
+<script>
+    document.querySelector('img').addEventListener('click', function() {
+        this.src = '/verifyCode?' + Math.random();
+    });
+</script>
 </html>

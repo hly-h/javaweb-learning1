@@ -30,30 +30,30 @@ public class EnrollServlet extends HttpServlet {
         String password = req.getParameter("password");
         String nickname = req.getParameter("nickname");
         String address = req.getParameter("address");
+        String inputCode=req.getParameter("verifyCode");
+        String storedCode=(String) req.getSession().getAttribute("captcha");
 
-        // 非空检查
-        if (account == null || phone == null || password == null || nickname == null || address == null ||
-                account.trim().isEmpty() || phone.trim().isEmpty() || password.trim().isEmpty() || nickname.trim().isEmpty() || address.trim().isEmpty()) {
-            resp.sendRedirect("/enroll?error=empty_fields");
-            return;
-        }
+        // 验证码检查
+        if (inputCode != null && inputCode.equalsIgnoreCase(storedCode)) {
+            // 非空检查
+            if (account.isEmpty() || phone.isEmpty() || password.isEmpty() || nickname.isEmpty() || address.isEmpty()) {
+                resp.sendRedirect("/enroll?error=empty_fields");
+                return;
+            }
 
-        // 去除空格
-        account = account.trim();
-        phone = phone.trim();
-        password = password.trim();
-        nickname = nickname.trim();
-        address = address.trim();
-
-        // 调用UserService的注册方法
-        boolean registered = userService.signUp(account, phone, password,nickname, address);
-
-        if (registered) {
-            // 注册成功后，重定向到登录页面
-            resp.sendRedirect("/login-page?success=registered");
+            // 调用UserService的注册方法
+            boolean registered = userService.signUp(account, phone, password, nickname, address);
+            System.out.println(registered);
+            if (registered) {
+                // 注册成功后，重定向到登录页面
+                resp.sendRedirect("/login-page?success=registered");
+            } else {
+                // 注册失败处理
+                resp.sendRedirect("/enroll?error=registration_failed");
+            }
         } else {
-            // 注册失败处理
-            resp.sendRedirect("/enroll?error=registration_failed");
+            req.setAttribute("errorMessage", "验证码错误，请重试！");
+            req.getRequestDispatcher("/enroll.html").forward(req, resp);
         }
     }
 

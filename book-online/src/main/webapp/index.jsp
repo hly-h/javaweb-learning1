@@ -90,7 +90,7 @@
   <h2>读书时刻</h2>
   <input type="text" placeholder="书名、作者、ISBN" class="search-input">
   <div class="search-btn">
-    <img src="images/search.png" alt="">
+    <img src="images/search.jpg" alt="">
   </div>
 </div>
 
